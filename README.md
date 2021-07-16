@@ -6,10 +6,10 @@ Preview: <https://mida.re/hannya-roll/>
 
 Forked from <https://ginpei.github.io/hannya-roll/> (https://github.com/ginpei/hannya-roll)
 
-## Compare to origin version
+## Compare to the origin version
 
-- Remove auto animation.
-- Add grabing scroll effect.
+- Remove the auto scroll animation.
+- Add grabbing-scroll effect.
 - Add a persist counter (click the counter number to reset).
 
 ## Notes
