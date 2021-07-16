@@ -3,7 +3,7 @@
 /**
  * @param {function} callback
  */
-export function throttle (callback) {
+export function throttle(callback) {
   let handle = 0;
   return (...args) => {
     cancelAnimationFrame(handle);
@@ -17,7 +17,7 @@ export function throttle (callback) {
  * @param {number} fps
  * @param {() => void} render
  */
-export function animate (fps, render) {
+export function animate(fps, render) {
   const interval = 1000 / fps;
   let handle = 0;
   let drawnAt = 0;

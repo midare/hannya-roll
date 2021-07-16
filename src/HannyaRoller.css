@@ -27,25 +27,32 @@
 .HannyaRoller-line {
   --line-index: 0; /* set in style attr */
   --line-progress: calc(var(--line-index) / var(--lines));
-  --line-rotation-progress: calc(var(--rotation-progress) - var(--line-progress));
+  --line-rotation-progress: calc(
+    var(--rotation-progress) - var(--line-progress)
+  );
 
   left: calc(50% - 0.5em);
   position: absolute;
   top: calc(50% - (var(--surface-height) / 2));
-  transform:
-    rotateY(calc(var(--line-rotation-progress) * 360deg))
+  transform: rotateY(calc(var(--line-rotation-progress) * 360deg))
     translateZ(calc(var(--perspective) * 0.4));
 }
 .HannyaRoller-letter {
-  font-family: a-otf-midashi-mi-ma31-pr6n, "Yu Mincho", sans-serif;
+  font-family: a-otf-midashi-mi-ma31-pr6n, 'Yu Mincho', sans-serif;
   font-weight: bold;
   line-height: 1em;
-  padding-bottom: calc((var(--surface-height) - 1em) / (var(--letters-in-line) - 1) - 1em);
+  padding-bottom: calc(
+    (var(--surface-height) - 1em) / (var(--letters-in-line) - 1) - 1em
+  );
   text-align: center;
   width: 1em;
 }
 
 @keyframes HannyaRoller-rollerInitialRotate {
-  0% { transform: perspective(var(--perspective)) rotateY(-720deg); }
-  100% { transform: perspective(var(--perspective)) rotateY(0deg); }
+  0% {
+    transform: perspective(var(--perspective)) rotateY(-720deg);
+  }
+  100% {
+    transform: perspective(var(--perspective)) rotateY(0deg);
+  }
 }

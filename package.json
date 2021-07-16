@@ -2,7 +2,8 @@
   "private": true,
   "scripts": {
     "build": "echo NODE_ENV=$NODE_ENV && webpack --config config/webpack.config.js",
-    "lint": "eslint src",
+    "lint": "prettier src && eslint src",
+    "lint:fix": "prettier --write src && eslint --fix src",
     "publish": "npm run build && push-dir --dir=dist --branch=gh-pages --cleanup",
     "start": "webpack-dev-server --config config/webpack.config.js --open",
     "test": "jest",
@@ -23,6 +24,7 @@
     "html-webpack-plugin": "^3.2.0",
     "interpolate-html-plugin": "^3.0.0",
     "jest": "^24.5.0",
+    "prettier": "^2.3.2",
     "push-dir": "^0.4.1",
     "style-loader": "^0.23.1",
     "typescript": "^3.3.3333",

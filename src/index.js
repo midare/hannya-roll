@@ -6,4 +6,7 @@ import text from './hannya-text';
 const el = document.querySelector('#root');
 const roller = new HannyaRoller({ el, text });
 roller.start();
-window.addEventListener('resize', throttle(() => roller.updateLayout()));
+window.addEventListener(
+  'resize',
+  throttle(() => roller.updateLayout()),
+);
