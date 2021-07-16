@@ -18,5 +18,6 @@ module.exports = {
     'class-methods-use-this': 'off',
     'import/extensions': ['error', 'ignorePackages'],
     'no-unused-vars': ['off'],
+    'operator-linebreak': ['off'],
   },
 };

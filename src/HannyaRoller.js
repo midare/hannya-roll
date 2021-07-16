@@ -10,11 +10,16 @@ export default class HannyaRoller {
     this._text = text;
 
     this._buildElements();
+    this._prepareElements();
   }
 
   start() {
     this._el.appendChild(this.elSpace);
     this.updateLayout();
+
+    // move to center allow scroll left or right
+    this.elScroller.scrollLeft = window.innerWidth * 2;
+
     // this._startAnimation();
   }
 
@@ -39,12 +44,41 @@ export default class HannyaRoller {
     this.elRoller.classList.add('HannyaRoller-roller');
     this.elSpace.appendChild(this.elRoller);
 
+    this.elScroller = document.createElement('div');
+    this.elScroller.classList.add('HannyaRoller-scroller');
+    this.elSpace.appendChild(this.elScroller);
+
     this.elLetterList = [...this._text].map((letter) => {
       const elLetter = document.createElement('div');
       elLetter.classList.add('HannyaRoller-letter');
       elLetter.textContent = letter;
       return elLetter;
     });
+  }
+
+  _prepareElements() {
+    this.elScroller.addEventListener(
+      'scroll',
+      this._onScrollerScroll.bind(this),
+      {
+        passive: true,
+      },
+    );
+  }
+
+  _onScrollerScroll(e) {
+    const width = window.innerWidth;
+
+    // infinity scroll
+    if (this.elScroller.scrollLeft < width) {
+      this.elScroller.scrollLeft += width;
+    }
+    if (this.elScroller.scrollLeft > width * 3) {
+      this.elScroller.scrollLeft -= width;
+    }
+
+    const progress = (this.elScroller.scrollLeft % width) / width;
+    this.elRoller.style.setProperty('--rotation-progress', `${-progress}`);
   }
 
   /**
@@ -80,9 +114,7 @@ export default class HannyaRoller {
   /**
    * @param {IRollerLayout} layout
    */
-  _render({
-    fontSize, nLettersInLine, nLines, surfaceHeight,
-  }) {
+  _render({ fontSize, nLettersInLine, nLines, surfaceHeight }) {
     this.elRoller.style.setProperty('--surface-height', `${surfaceHeight}px`);
     this.elRoller.style.setProperty('--font-size', `${fontSize}px`);
     this.elRoller.style.setProperty('--letters-in-line', `${nLettersInLine}`);
@@ -118,7 +150,7 @@ export default class HannyaRoller {
       const timeProgress = ((Date.now() - startedAt) % cycle) / cycle;
       const sum = progressOffset + timeProgress;
       const progress = sum - Math.floor(sum);
-      this.elSpace.style.setProperty('--rotation-progress', `${progress}`);
+      this.elRoller.style.setProperty('--rotation-progress', `${progress}`);
     });
   }
 }
