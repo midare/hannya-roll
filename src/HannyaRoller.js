@@ -1,5 +1,5 @@
 import './HannyaRoller.css';
-import { animate } from './misc';
+import { animate, numberToKanji } from './misc';
 
 export default class HannyaRoller {
   /**
@@ -11,6 +11,8 @@ export default class HannyaRoller {
 
     this._buildElements();
     this._prepareElements();
+
+    this._scrollCount = Number(window.localStorage.getItem('hannyaRollCount'));
   }
 
   start() {
@@ -18,7 +20,13 @@ export default class HannyaRoller {
     this.updateLayout();
 
     // move to center allow scroll left or right
-    this.elScroller.scrollLeft = window.innerWidth * 2;
+    this.elScroller.scrollLeft = window.innerWidth * 3;
+    this._scrollLeft = this.elScroller.scrollLeft;
+    this._scrollDistance = 0;
+    this._currentScrollCount = 0;
+    this.elCounter.innerText = numberToKanji(Math.floor(this._scrollCount));
+
+    this.updateCount();
 
     // this._startAnimation();
   }
@@ -29,6 +37,16 @@ export default class HannyaRoller {
     const screenHeight = this._el.clientHeight;
     const layout = this._findBestLayout(length, screenWidth, screenHeight);
     this._render(layout);
+  }
+
+  updateCount() {
+    const scrollCount = Math.floor(this._scrollDistance / window.innerWidth);
+    if (scrollCount !== this._currentScrollCount) {
+      this._currentScrollCount = scrollCount;
+      this._scrollCount += 1;
+      this.elCounter.innerText = numberToKanji(Math.floor(this._scrollCount));
+      window.localStorage.setItem('hannyaRollCount', String(this._scrollCount));
+    }
   }
 
   destroy() {
@@ -43,6 +61,10 @@ export default class HannyaRoller {
     this.elRoller = document.createElement('div');
     this.elRoller.classList.add('HannyaRoller-roller');
     this.elSpace.appendChild(this.elRoller);
+
+    this.elCounter = document.createElement('div');
+    this.elCounter.classList.add('HannyaRoller-counter');
+    this.elSpace.appendChild(this.elCounter);
 
     this.elScroller = document.createElement('div');
     this.elScroller.classList.add('HannyaRoller-scroller');
@@ -60,25 +82,48 @@ export default class HannyaRoller {
     this.elScroller.addEventListener(
       'scroll',
       this._onScrollerScroll.bind(this),
-      {
-        passive: true,
-      },
+      { passive: true },
     );
+    this.elScroller.addEventListener(
+      'scrollStart',
+      this._onScrollerScrollStart.bind(this),
+    );
+    this.elCounter.addEventListener('click', this._resetCounter.bind(this));
+  }
+
+  _onScrollerScrollStart(e) {
+    this._scrollLeft = this.elScroller.scrollLeft;
   }
 
   _onScrollerScroll(e) {
     const width = window.innerWidth;
+    const distance = Math.abs(this.elScroller.scrollLeft - this._scrollLeft);
+
+    // HACK: filter invalid scroll
+    if (distance < width * 0.7) {
+      this._scrollDistance += distance;
+      this._scrollLeft = this.elScroller.scrollLeft;
+      this.updateCount();
+    }
 
     // infinity scroll
-    if (this.elScroller.scrollLeft < width) {
-      this.elScroller.scrollLeft += width;
+    if (this.elScroller.scrollLeft <= 0) {
+      this.elScroller.scrollLeft = width * 6 - 1;
     }
-    if (this.elScroller.scrollLeft > width * 3) {
-      this.elScroller.scrollLeft -= width;
+    if (this.elScroller.scrollLeft >= width * 6) {
+      this.elScroller.scrollLeft = 0;
     }
 
-    const progress = (this.elScroller.scrollLeft % width) / width;
+    const progress = (this.elScroller.scrollLeft % (width * 2)) / (width * 2);
     this.elRoller.style.setProperty('--rotation-progress', `${-progress}`);
+  }
+
+  _resetCounter() {
+    this._scrollDistance = 0;
+    this._currentScrollCount = 0;
+    this._scrollCount = 0;
+    this.elCounter.innerText = numberToKanji(0);
+    window.localStorage.removeItem('hannyaRollCount');
   }
 
   /**
@@ -89,7 +134,7 @@ export default class HannyaRoller {
    */
   _findBestLayout(length, screenWidth, screenHeight) {
     const surfaceWidth = screenWidth * Math.PI;
-    const surfaceHeight = screenHeight * 0.55;
+    const surfaceHeight = screenHeight * 0.55 * 0.9;
 
     const layout = {
       fontSize: 10,
@@ -117,6 +162,7 @@ export default class HannyaRoller {
   _render({ fontSize, nLettersInLine, nLines, surfaceHeight }) {
     this.elRoller.style.setProperty('--surface-height', `${surfaceHeight}px`);
     this.elRoller.style.setProperty('--font-size', `${fontSize}px`);
+    this.elCounter.style.setProperty('--font-size', `${fontSize}px`);
     this.elRoller.style.setProperty('--letters-in-line', `${nLettersInLine}`);
     this.elRoller.style.setProperty('--lines', `${nLines}`);
     this.elRoller.innerHTML = '';

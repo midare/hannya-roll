@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const InterpolateHtmlPlugin = require('interpolate-html-plugin');
 
 const isProduction = process.env.NODE_ENV === 'production';
-const publicPath = isProduction ? '/hannya-roll' : '';
+const publicPath = isProduction ? 'https://mida.re/hannya-roll' : '';
 
 module.exports = {
   mode: isProduction ? 'production' : 'development',
@@ -22,10 +22,7 @@ module.exports = {
     rules: [
       {
         test: /\.css$/,
-        use: [
-          'style-loader',
-          'css-loader',
-        ],
+        use: ['style-loader', 'css-loader'],
       },
     ],
   },

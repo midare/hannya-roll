@@ -5,8 +5,17 @@
     <link rel="shortcut icon" href="%PUBLIC_URL%/icon-42.png" />
     <meta
       name="viewport"
-      content="width=device-width,initial-scale=1,user-scalable=no,shrink-to-fit=no"
+      content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=auto"
     />
+    <meta property="og:url" content="%PUBLIC_URL%/" />
+    <meta
+      name="description"
+      property="og:description"
+      content="観自在菩薩行深般若波羅蜜多時"
+    />
+    <meta property="og:site_name" content="Hannya Roll" />
+    <meta property="og:title" content="Hannya Roll" />
+    <meta property="og:image" content="%PUBLIC_URL%/image.jpg" />
     <meta name="theme-color" content="#000000" />
     <title>Hannya Roll</title>
     <script>
@@ -43,6 +52,10 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <!-- for font pre load -->
+    <div style="display: none">一二三四五六七八九十百万億兆</div>
+
     <div id="root"></div>
     <!--
       This HTML file is a template.

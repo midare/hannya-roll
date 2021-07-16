@@ -1,4 +1,5 @@
 /* eslint-disable import/prefer-default-export */
+import { number2kanji } from '@geolonia/japanese-numeral';
 
 /**
  * @param {function} callback
@@ -31,4 +32,9 @@ export function animate(fps, render) {
   };
   draw();
   return () => window.cancelAnimationFrame(handle);
+}
+
+export function numberToKanji(number) {
+  if (number === 0) return '〇';
+  return number2kanji(number);
 }
