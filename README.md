@@ -1,8 +1,8 @@
 # Hannya Roll
 
-<https://mida.re/hannya-roll/>
+Preview: <https://mida.re/hannya-roll/>
 
-![hannya roll](!https://mida.re/hannya-roll/image.png)
+![hannya roll](https://mida.re/hannya-roll/image.png)
 
 Forked from <https://ginpei.github.io/hannya-roll/> (https://github.com/ginpei/hannya-roll)
 
